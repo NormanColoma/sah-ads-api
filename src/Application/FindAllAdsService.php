@@ -17,8 +17,8 @@ class FindAllAdsService
         $this->adDataTransformer = $adDataTransformer;
     }
 
-    public function execute(): array {
-        $ads = $this->adRepository->findAll();
+    public function execute(FindAllAdsServiceRequest $findAllAdsServiceRequest): array {
+        $ads = $this->adRepository->findAll($findAllAdsServiceRequest->getSortedBy(), $findAllAdsServiceRequest->getDirection(), $findAllAdsServiceRequest->getPage());
         $this->adDataTransformer->write($ads);
         return $this->adDataTransformer->read();
     }

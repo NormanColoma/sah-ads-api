@@ -18,12 +18,14 @@ class RedisRepository implements AdRepository
 
     public function save(Ad $ad): void
     {
-        $this->client->hSet('ads', $ad->getId(), serialize($ad));
+        $this->client->lpush('ads', serialize($ad));
     }
 
-    public function findAll(): array
+    public function findAll($sortBy, $direction, $page): array
     {
-        $ads = $this->client->hGetAll('ads');
+        $start = $page*10;
+        $stop  = $start+9;
+        $ads = $this->client->lrange('ads', $start, $stop);
         return array_map(function ($data) {
             return unserialize($data);
         }, $ads);

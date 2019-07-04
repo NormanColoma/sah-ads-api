@@ -17,11 +17,7 @@ class CreateAdService
     }
 
     public function execute(CreateAdRequest $request) {
-        try {
-            $ad = new Ad($request->getId(), $request->getTitle(), $request->getLink(), $request->getCity(), $request->getImage());
-        } catch(\Exception $ex) {
-            print($ex);
-        }
+        $ad = new Ad($request->getId(), $request->getTitle(), $request->getLink(), $request->getCity(), $request->getImage());
         $this->adRepository->save($ad);
     }
 

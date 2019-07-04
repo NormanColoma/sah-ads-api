@@ -7,6 +7,7 @@ namespace App\Infrastructure\Rest\Controller;
 use App\Application\CreateAdRequest;
 use App\Application\CreateAdService;
 use App\Application\FindAllAdsService;
+use App\Application\FindAllAdsServiceRequest;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -37,7 +38,9 @@ class AdController extends AbstractController
      * @return JsonResponse
      */
     public function findAdds(Request $request, FindAllAdsService $findAllAdsService): JsonResponse {
-        return new JsonResponse($findAllAdsService->execute(), Response::HTTP_OK);
+        $page = $request->query->get('page');
+        $findAllAdsServiceRequest = new FindAllAdsServiceRequest(null, 'ASC', $page);
+        return new JsonResponse($findAllAdsService->execute($findAllAdsServiceRequest), Response::HTTP_OK);
     }
 
 

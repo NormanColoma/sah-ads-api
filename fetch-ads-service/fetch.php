@@ -27,6 +27,7 @@ $ads = array_map(function ($ad) {
 }, $decoded_json['ad']);
 
 
+
 foreach ($ads as $payload) {
     $ch = curl_init('http://127.0.0.1:8000/ads');
     curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
@@ -36,9 +37,11 @@ foreach ($ads as $payload) {
     curl_exec($ch);
 }
 
-/*$ch = curl_init('http://127.0.0.1:8000/ads');
-curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
-curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($ads[0]));
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
-curl_exec($ch);*/
+/*for ($i=0;$i<sizeof($ads);$i++) {
+    $ch = curl_init('http://127.0.0.1:8000/ads');
+    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($ads[$i]));
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+    curl_exec($ch);
+}*/

@@ -22,13 +22,13 @@ class MongoRepository implements AdRepository
         $this->db->ads->insertOne($document);
     }
 
-    public function findAll($sortBy, $direction, $page): array
+    public function findAll($sortedBy, $direction, $page): array
     {
         $skip = $page*10;
         $limit  = 10;
 
 
-        $documents = $this->db->ads->find([], ['skip' => $skip, 'limit' => $limit, 'sort' => array($sortBy => 1)]);
+        $documents = $this->db->ads->find([], ['skip' => $skip, 'limit' => $limit, 'sort' => array($sortedBy => 1)]);
         $ads = [];
 
         foreach ($documents as $document) {

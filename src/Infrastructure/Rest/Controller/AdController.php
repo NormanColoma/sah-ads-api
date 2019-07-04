@@ -39,7 +39,7 @@ class AdController extends AbstractController
      */
     public function findAdds(Request $request, FindAllAdsService $findAllAdsService): JsonResponse {
         $page = $request->query->get('page');
-        $findAllAdsServiceRequest = new FindAllAdsServiceRequest(null, 'ASC', $page);
+        $findAllAdsServiceRequest = new FindAllAdsServiceRequest('id', 'ASC', $page);
         return new JsonResponse($findAllAdsService->execute($findAllAdsServiceRequest), Response::HTTP_OK);
     }
 

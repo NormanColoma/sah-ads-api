@@ -29,6 +29,9 @@
     "doctrine/reflection": {
         "version": "v1.0.0"
     },
+    "mongodb/mongodb": {
+        "version": "1.4.2"
+    },
     "predis/predis": {
         "version": "v1.1.1"
     },

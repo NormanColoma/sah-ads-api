@@ -10,7 +10,7 @@ class FindAllAdsServiceRequest
     private $direction;
     private $page;
 
-    public function __construct($sortedBy=null, $direction='ASC', $page=0)
+    public function __construct($sortedBy='id', $direction='ASC', $page=0)
     {
         $this->sortedBy = $sortedBy;
         $this->direction = $direction;

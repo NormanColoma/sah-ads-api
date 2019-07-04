@@ -17,9 +17,9 @@ services:
         resource: '../src/*'
         exclude: '../src/{DependencyInjection,Entity,Migrations,Tests,Kernel.php}'
 
-    App\Infrastructure\Persistence\Redis\RedisClient:
+    App\Infrastructure\Persistence\Mongo\MongoClient:
       arguments:
-        $connection_url: '%env(REDIS_URL)%'
+        $connection_url: '%env(MONGO_URL)%'
 
     # controllers are imported separately to make sure services can be injected
     # as action arguments even if you don't extend any base controller class

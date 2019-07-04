@@ -14,7 +14,7 @@ function extractImageFromPictures($pictures) {
 
 function createAdJsonPayload($ad) {
     return array(
-        'id' => $ad['id'],
+        'id' => (int)$ad['id'],
         'title' => $ad['title'],
         'link' => $ad['url'],
         'city' => $ad['city'],
@@ -37,11 +37,11 @@ foreach ($ads as $payload) {
     curl_exec($ch);
 }
 
-/*for ($i=0;$i<sizeof($ads);$i++) {
+/*for ($i=0;$i<1;$i++) {
     $ch = curl_init('http://127.0.0.1:8000/ads');
     curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
     curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($ads[$i]));
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
-    curl_exec($ch);
+    print(curl_exec($ch));
 }*/

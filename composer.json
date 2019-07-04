@@ -8,6 +8,7 @@
         "ext-iconv": "*",
         "ext-json": "*",
         "ext-simplexml": "*",
+        "mongodb/mongodb": "^1.4",
         "predis/predis": "^1.1",
         "sensio/framework-extra-bundle": "^5.4",
         "symfony/console": "4.3.*",

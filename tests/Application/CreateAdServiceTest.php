@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Tests\Application\Service;
+namespace App\Tests\Application;
 
 
 use App\Application\CreateAdRequest;

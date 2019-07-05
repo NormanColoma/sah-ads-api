@@ -6,7 +6,7 @@ namespace App\Application;
 
 use App\Domain\AdRepository;
 
-class DownloadAdsAsJson
+class DownloadAdsAsJsonService
 {
     private $adsRepository;
     private $adDataTransformer;

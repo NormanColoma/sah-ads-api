@@ -6,7 +6,7 @@ namespace App\Infrastructure\Rest\Controller;
 
 use App\Application\CreateAdRequest;
 use App\Application\CreateAdService;
-use App\Application\DownloadAdsAsJson;
+use App\Application\DownloadAdsAsJsonService;
 use App\Application\DownloadAdsAsJsonRequest;
 use App\Application\FindAllAdsService;
 use App\Application\FindAllAdsServiceRequest;
@@ -61,10 +61,10 @@ class AdController extends AbstractController
     /**
      * @Route("/ads/json", name="download_ads_as_json", methods={"GET"})
      * @param Request $request
-     * @param DownloadAdsAsJson $downloadAdsAsJson
+     * @param DownloadAdsAsJsonService $downloadAdsAsJson
      * @return ErrorResponse|JsonResponse
      */
-    public function downloadAdsAsJson(Request $request, DownloadAdsAsJson $downloadAdsAsJson) {
+    public function downloadAdsAsJson(Request $request, DownloadAdsAsJsonService $downloadAdsAsJson) {
         $page = $request->query->get('page');
         $sortedBy = $request->query->get('sortedBy');
         $direction = $request->query->get('direction');

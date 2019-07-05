@@ -28,7 +28,7 @@ class MongoRepository implements AdRepository
         $limit  = 10;
 
 
-        $documents = $this->db->ads->find([], ['skip' => $skip, 'limit' => $limit, 'sort' => array($sortedBy => 1)]);
+        $documents = $this->db->ads->find([], ['skip' => $skip, 'limit' => $limit, 'sort' => array($sortedBy => $direction)]);
         $ads = [];
 
         foreach ($documents as $document) {

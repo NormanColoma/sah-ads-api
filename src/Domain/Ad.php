@@ -12,7 +12,7 @@ class Ad
     private $city;
     private $image;
 
-    public function __construct(int $id, string $title, string $link, string $city, string $image)
+    public function __construct($id, $title, $link, $city, $image)
     {
         $this->setId($id);
         $this->setTitle($title);

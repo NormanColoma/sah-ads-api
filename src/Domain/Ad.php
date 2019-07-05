@@ -12,7 +12,7 @@ class Ad
     private $city;
     private $image;
 
-    public function __construct(string $id, string $title, string $link, string $city, string $image)
+    public function __construct(int $id, string $title, string $link, string $city, string $image)
     {
         $this->setId($id);
         $this->setTitle($title);
@@ -35,7 +35,7 @@ class Ad
      */
     public function setId($id): void
     {
-        if (!is_string($id)) {
+        if (!is_numeric($id)) {
             throw new AdNotValidException('Ad has not valid id');
         }
         $this->id = $id;

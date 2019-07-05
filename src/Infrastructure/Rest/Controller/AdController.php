@@ -8,6 +8,7 @@ use App\Application\CreateAdRequest;
 use App\Application\CreateAdService;
 use App\Application\FindAllAdsService;
 use App\Application\FindAllAdsServiceRequest;
+use App\Infrastructure\Rest\Response\ErrorResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -39,9 +40,18 @@ class AdController extends AbstractController
      */
     public function findAdds(Request $request, FindAllAdsService $findAllAdsService): JsonResponse {
         $page = $request->query->get('page');
-        $findAllAdsServiceRequest = new FindAllAdsServiceRequest('id', 1, $page);
+        $sortedBy = $request->query->get('sortedBy');
+        $direction = $request->query->get('direction');
+
+        if (is_null($page)) {
+            return new ErrorResponse('Parameter page is missing');
+        } else if(is_null($sortedBy)) {
+            return new ErrorResponse('Parameter sortedBy is missing');
+        } else if(is_null($direction)) {
+            return new ErrorResponse('Parameter direction is missing');
+        }
+
+        $findAllAdsServiceRequest = new FindAllAdsServiceRequest($sortedBy, (int) $direction, $page);
         return new JsonResponse($findAllAdsService->execute($findAllAdsServiceRequest), Response::HTTP_OK);
     }
-
-
 }

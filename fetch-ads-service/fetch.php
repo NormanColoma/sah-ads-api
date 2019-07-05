@@ -14,7 +14,7 @@ function extractImageFromPictures($pictures) {
 
 function createAdJsonPayload($ad) {
     return array(
-        'id' => (int) $ad['id'],
+        'id' => $ad['id'],
         'title' => $ad['title'],
         'link' => $ad['url'],
         'city' => $ad['city'],

@@ -25,12 +25,29 @@ class MongoRepository implements AdRepository
     public function findAll($sortedBy, $direction, $page): array
     {
         $skip = $page*10;
-        $limit  = 10;
+        $limit  = 10+$skip;
 
+        $keyToSort = $sortedBy === 'id' ? $sortedBy : 'length';
+        $length = $sortedBy === 'id' ? null : array('$strLenCP' => '$'.$sortedBy);
+        $documents = $this->db->ads->aggregate(
+            array(
+                array('$project' =>
+                    array(
+                        'id'=> 1,
+                        'title' => 1,
+                        'link' => 1,
+                        'city' => 1,
+                        'image' => 1,
+                        'length' => $length
+                    )
+                ),
+                array('$sort' => array($keyToSort => $direction)),
+                array('$limit' => $limit),
+                array('$skip' => $skip)
+            )
+        );
 
-        $documents = $this->db->ads->find([], ['skip' => $skip, 'limit' => $limit, 'sort' => array($sortedBy => $direction)]);
         $ads = [];
-
         foreach ($documents as $document) {
             $json = $document->jsonSerialize();
             array_push($ads, new Ad($json->id, $json->title, $json->link, $json->city, $json->image));

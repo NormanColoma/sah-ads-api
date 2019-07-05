@@ -6,10 +6,13 @@ namespace App\Infrastructure\Rest\Controller;
 
 use App\Application\CreateAdRequest;
 use App\Application\CreateAdService;
+use App\Application\DownloadAdsAsJson;
+use App\Application\DownloadAdsAsJsonRequest;
 use App\Application\FindAllAdsService;
 use App\Application\FindAllAdsServiceRequest;
 use App\Infrastructure\Rest\Response\ErrorResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\HeaderUtils;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -53,5 +56,38 @@ class AdController extends AbstractController
 
         $findAllAdsServiceRequest = new FindAllAdsServiceRequest($sortedBy, (int) $direction, $page);
         return new JsonResponse($findAllAdsService->execute($findAllAdsServiceRequest), Response::HTTP_OK);
+    }
+
+    /**
+     * @Route("/ads/json", name="download_ads_as_json", methods={"GET"})
+     * @param Request $request
+     * @param DownloadAdsAsJson $downloadAdsAsJson
+     * @return ErrorResponse|JsonResponse
+     */
+    public function downloadAdsAsJson(Request $request, DownloadAdsAsJson $downloadAdsAsJson) {
+        $page = $request->query->get('page');
+        $sortedBy = $request->query->get('sortedBy');
+        $direction = $request->query->get('direction');
+
+        if (is_null($page)) {
+            return new ErrorResponse('Parameter page is missing');
+        } else if(is_null($sortedBy)) {
+            return new ErrorResponse('Parameter sortedBy is missing');
+        } else if(is_null($direction)) {
+            return new ErrorResponse('Parameter direction is missing');
+        }
+
+        $downloadAdsAsJsonRequest = new DownloadAdsAsJsonRequest($sortedBy, (int) $direction, $page);
+        $fileContent = $downloadAdsAsJson->execute($downloadAdsAsJsonRequest);
+        $response = JsonResponse::fromJsonString(json_encode($fileContent, JSON_UNESCAPED_SLASHES));
+
+        $disposition = HeaderUtils::makeDisposition(
+            HeaderUtils::DISPOSITION_ATTACHMENT,
+            'ads.json'
+        );
+
+        $response->headers->set('Content-Disposition', $disposition);
+
+        return $response;
     }
 }

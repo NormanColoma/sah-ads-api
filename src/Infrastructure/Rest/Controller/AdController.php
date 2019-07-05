@@ -31,7 +31,7 @@ class AdController extends AbstractController
         $createAdRequest = new CreateAdRequest($decoded_request['id'], $decoded_request['title'], $decoded_request['link'], $decoded_request['city'], $decoded_request['image']);
 
         $createAdService->execute($createAdRequest);
-        return new Response(null,201, ['Access-Control-Allow-Origin' => '*']);
+        return new Response(null,Response::HTTP_CREATED, ['Access-Control-Allow-Origin' => '*']);
     }
 
 
@@ -78,8 +78,7 @@ class AdController extends AbstractController
         }
 
         $downloadAdsAsJsonRequest = new DownloadAdsAsJsonRequest($sortedBy, (int) $direction, $page);
-        $fileContent = $downloadAdsAsJson->execute($downloadAdsAsJsonRequest);
-        $response = JsonResponse::fromJsonString(json_encode($fileContent, JSON_UNESCAPED_SLASHES));
+        $response = JsonResponse::fromJsonString(json_encode($downloadAdsAsJson->execute($downloadAdsAsJsonRequest), JSON_UNESCAPED_SLASHES));
 
         $disposition = HeaderUtils::makeDisposition(
             HeaderUtils::DISPOSITION_ATTACHMENT,

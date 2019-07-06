@@ -60,7 +60,7 @@ class MongoRepository implements AdRepository
         $limit  = 10*$untilPage;
 
         $keyToSort = $sortedBy === 'id' ? $sortedBy : 'length';
-        $length = $sortedBy === 'id' ? null : array('$strLenCP' => '$.id');
+        $length = $sortedBy === 'id' ? null : array('$strLenCP' => '$'.$sortedBy);
         $documents = $this->db->ads->aggregate(
             array(
                 array('$project' =>

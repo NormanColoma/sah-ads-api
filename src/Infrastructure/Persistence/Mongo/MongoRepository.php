@@ -54,4 +54,35 @@ class MongoRepository implements AdRepository
         }
         return $ads;
     }
+
+    public function findAllUntil($sortedBy, $direction, $untilPage): array
+    {
+        $limit  = 10*$untilPage;
+
+        $keyToSort = $sortedBy === 'id' ? $sortedBy : 'length';
+        $length = $sortedBy === 'id' ? null : array('$strLenCP' => '$.id');
+        $documents = $this->db->ads->aggregate(
+            array(
+                array('$project' =>
+                    array(
+                        'id'=> 1,
+                        'title' => 1,
+                        'link' => 1,
+                        'city' => 1,
+                        'image' => 1,
+                        'length' => $length
+                    )
+                ),
+                array('$sort' => array($keyToSort => $direction)),
+                array('$limit' => $limit),
+            )
+        );
+
+        $ads = [];
+        foreach ($documents as $document) {
+            $json = $document->jsonSerialize();
+            array_push($ads, new Ad($json->id, $json->title, $json->link, $json->city, $json->image));
+        }
+        return $ads;
+    }
 }

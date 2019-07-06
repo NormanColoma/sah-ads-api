@@ -8,13 +8,13 @@ class DownloadAdsAsJsonRequest
 {
     private $sortedBy;
     private $direction;
-    private $page;
+    private $untilPage;
 
-    public function __construct($sortedBy='id', $direction=1, $page=0)
+    public function __construct($sortedBy='id', $direction=1, $untilPage=0)
     {
         $this->sortedBy = $sortedBy;
         $this->direction = $direction;
-        $this->page = $page;
+        $this->untilPage = $untilPage;
     }
 
     /**
@@ -34,11 +34,11 @@ class DownloadAdsAsJsonRequest
     }
 
     /**
-     * @return int
+     * @return mixed
      */
-    public function getPage(): int
+    public function getUntilPage()
     {
-        return $this->page;
+        return $this->untilPage;
     }
 
 }

@@ -21,7 +21,7 @@ class DownloadAdsAsJsonServiceTest extends TestCase
         $ad = new Ad(5, 'tes', 'https://test.com', 'test', 'https://test.com');
 
         $adRepository->expects($this->once())
-            ->method('findAll')
+            ->method('findAllUntil')
             ->with('id', 1, 0)
             ->willReturn(array($ad));
 

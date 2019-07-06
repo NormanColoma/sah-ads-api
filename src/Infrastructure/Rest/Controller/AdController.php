@@ -11,6 +11,7 @@ use App\Application\DownloadAdsAsJsonRequest;
 use App\Application\FindAllAdsService;
 use App\Application\FindAllAdsServiceRequest;
 use App\Infrastructure\Rest\Response\ErrorResponse;
+use Error;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\HeaderUtils;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -65,28 +66,35 @@ class AdController extends AbstractController
      * @return ErrorResponse|JsonResponse
      */
     public function downloadAdsAsJson(Request $request, DownloadAdsAsJsonService $downloadAdsAsJson) {
-        $page = $request->query->get('page');
+        $untilPage = $request->query->get('untilPage');
         $sortedBy = $request->query->get('sortedBy');
         $direction = $request->query->get('direction');
 
-        if (is_null($page)) {
-            return new ErrorResponse('Parameter page is missing');
+        if (is_null($untilPage)) {
+            return new ErrorResponse('Parameter untilPage is missing');
         } else if(is_null($sortedBy)) {
             return new ErrorResponse('Parameter sortedBy is missing');
         } else if(is_null($direction)) {
             return new ErrorResponse('Parameter direction is missing');
         }
 
-        $downloadAdsAsJsonRequest = new DownloadAdsAsJsonRequest($sortedBy, (int) $direction, $page);
-        $response = JsonResponse::fromJsonString(json_encode($downloadAdsAsJson->execute($downloadAdsAsJsonRequest), JSON_UNESCAPED_SLASHES));
 
-        $disposition = HeaderUtils::makeDisposition(
-            HeaderUtils::DISPOSITION_ATTACHMENT,
-            'ads.json'
-        );
+        $downloadAdsAsJsonRequest = new DownloadAdsAsJsonRequest($sortedBy, (int) $direction, $untilPage);
 
-        $response->headers->set('Content-Disposition', $disposition);
+        try {
+            $response = JsonResponse::fromJsonString(json_encode($downloadAdsAsJson->execute($downloadAdsAsJsonRequest), JSON_UNESCAPED_SLASHES));
 
-        return $response;
+            $disposition = HeaderUtils::makeDisposition(
+                HeaderUtils::DISPOSITION_ATTACHMENT,
+                'ads.json'
+            );
+
+            $response->headers->set('Content-Disposition', $disposition);
+            $response->headers->set('Access-Control-Allow-Origin', '*');
+
+            return $response;
+        }catch (Error $er) {
+            return new ErrorResponse($er->getMessage());
+        }
     }
 }

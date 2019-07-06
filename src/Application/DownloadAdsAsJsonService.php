@@ -18,7 +18,7 @@ class DownloadAdsAsJsonService
     }
 
     public function execute(DownloadAdsAsJsonRequest $downloadAdsAsJsonRequest) {
-        $ads = $this->adsRepository->findAll($downloadAdsAsJsonRequest->getSortedBy(), $downloadAdsAsJsonRequest->getDirection(), $downloadAdsAsJsonRequest->getPage());
+        $ads = $this->adsRepository->findAllUntil($downloadAdsAsJsonRequest->getSortedBy(), $downloadAdsAsJsonRequest->getDirection(), $downloadAdsAsJsonRequest->getUntilPage());
         $this->adDataTransformer->write($ads);
         return $this->adDataTransformer->read();
     }

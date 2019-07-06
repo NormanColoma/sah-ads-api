@@ -27,21 +27,18 @@ $ads = array_map(function ($ad) {
 }, $decoded_json['ad']);
 
 
+printf('Starting to save processed xml...%s', PHP_EOL);
+
+$API_URL = getenv('API_URL');
+echo 'API IS '.$API_URL;
 
 foreach ($ads as $payload) {
-    $ch = curl_init('http://127.0.0.1:8000/ads');
+    $ch = curl_init($API_URL);
     curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
     curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
-    curl_exec($ch);
+    $result = curl_exec($ch);
 }
 
-/*for ($i=0;$i<1;$i++) {
-    $ch = curl_init('http://127.0.0.1:8000/ads');
-    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
-    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($ads[$i]));
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
-    print(curl_exec($ch));
-}*/
+print('Process ended correctly!');

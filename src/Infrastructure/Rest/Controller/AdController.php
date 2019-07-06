@@ -55,7 +55,7 @@ class AdController extends AbstractController
         }
 
         $findAllAdsServiceRequest = new FindAllAdsServiceRequest($sortedBy, (int) $direction, $page);
-        return new JsonResponse($findAllAdsService->execute($findAllAdsServiceRequest), Response::HTTP_OK);
+        return new JsonResponse($findAllAdsService->execute($findAllAdsServiceRequest), Response::HTTP_OK, ['Access-Control-Allow-Origin' => '*']);
     }
 
     /**

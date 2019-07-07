@@ -6,6 +6,8 @@ namespace App\Infrastructure\Persistence\Mongo;
 use App\Domain\Ad;
 use App\Domain\AdRepository;
 
+const ELEMENTS_PER_PAGE = 10;
+
 class MongoRepository implements AdRepository
 {
 
@@ -24,16 +26,17 @@ class MongoRepository implements AdRepository
 
     public function findAll($sortedBy, $direction, $page): array
     {
-        $skip = $page*10;
-        $limit  = 10+$skip;
+        $skip = $page*ELEMENTS_PER_PAGE;
+        $limit  = ELEMENTS_PER_PAGE+$skip;
 
         $keyToSort = $sortedBy === 'id' ? $sortedBy : 'length';
         $length = $sortedBy === 'id' ? null : array('$strLenCP' => '$'.$sortedBy);
+
         $documents = $this->db->ads->aggregate(
             array(
                 array('$project' =>
                     array(
-                        'id'=> 1,
+                        'id' => 1,
                         'title' => 1,
                         'link' => 1,
                         'city' => 1,
@@ -57,7 +60,7 @@ class MongoRepository implements AdRepository
 
     public function findAllUntil($sortedBy, $direction, $untilPage): array
     {
-        $limit  = 10*$untilPage;
+        $limit  = ELEMENTS_PER_PAGE*$untilPage;
 
         $keyToSort = $sortedBy === 'id' ? $sortedBy : 'length';
         $length = $sortedBy === 'id' ? null : array('$strLenCP' => '$'.$sortedBy);

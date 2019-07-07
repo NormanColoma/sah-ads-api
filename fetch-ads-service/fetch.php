@@ -30,7 +30,6 @@ $ads = array_map(function ($ad) {
 printf('Starting to save processed xml...%s', PHP_EOL);
 
 $API_URL = getenv('API_URL');
-echo 'API IS '.$API_URL;
 
 foreach ($ads as $payload) {
     $ch = curl_init($API_URL);

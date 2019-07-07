@@ -11,7 +11,7 @@ use App\Application\DownloadAdsAsJsonRequest;
 use App\Application\FindAllAdsService;
 use App\Application\FindAllAdsServiceRequest;
 use App\Infrastructure\Rest\Response\ErrorResponse;
-use Error;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\HeaderUtils;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -31,8 +31,12 @@ class AdController extends AbstractController
         $decoded_request = json_decode($request->getContent(), true);
         $createAdRequest = new CreateAdRequest($decoded_request['id'], $decoded_request['title'], $decoded_request['link'], $decoded_request['city'], $decoded_request['image']);
 
-        $createAdService->execute($createAdRequest);
-        return new Response(null,Response::HTTP_CREATED, ['Access-Control-Allow-Origin' => '*']);
+        try {
+            $createAdService->execute($createAdRequest);
+            return new Response(null, Response::HTTP_CREATED, ['Access-Control-Allow-Origin' => '*']);
+        } catch (Exception $er) {
+            return new ErrorResponse($er->getMessage());
+        }
     }
 
 
@@ -55,8 +59,13 @@ class AdController extends AbstractController
             return new ErrorResponse('Parameter direction is missing');
         }
 
-        $findAllAdsServiceRequest = new FindAllAdsServiceRequest($sortedBy, (int) $direction, $page);
-        return new JsonResponse($findAllAdsService->execute($findAllAdsServiceRequest), Response::HTTP_OK, ['Access-Control-Allow-Origin' => '*']);
+        try {
+            $findAllAdsServiceRequest = new FindAllAdsServiceRequest($sortedBy, (int)$direction, $page);
+            return new JsonResponse($findAllAdsService->execute($findAllAdsServiceRequest), Response::HTTP_OK, ['Access-Control-Allow-Origin' => '*']);
+        }catch (Exception $er) {
+            echo $er->getMessage();
+            return new ErrorResponse($er->getMessage());
+        }
     }
 
     /**
@@ -93,7 +102,7 @@ class AdController extends AbstractController
             $response->headers->set('Access-Control-Allow-Origin', '*');
 
             return $response;
-        }catch (Error $er) {
+        }catch (Exception $er) {
             return new ErrorResponse($er->getMessage());
         }
     }
